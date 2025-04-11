@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
     const { email, password } = reqBody;
-    console.log(reqBody);
     const verified = await User.findOne({ email }).select("isverified");
     if (!verified?.isverified) {
       return NextResponse.json({

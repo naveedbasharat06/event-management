@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,16 +20,17 @@ export default function LoginPage() {
 
     try {
       const response = await axios.post("api/users/login", user);
-      alert(response.data.message);
 
-      console.log(response.data);
       if (response.data.success) {
+        toast.success(response.data.message);
         window.dispatchEvent(new Event("userLoggedIn"));
         router.push("/");
       }
-    } catch (error) {
-      alert("Login failed. Please check your credentials.");
-      console.error(error);
+      if (!response.data.success) {
+        throw new Error(response.data.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }

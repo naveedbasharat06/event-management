@@ -7,7 +7,28 @@ connectDB();
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const { eventName, eventDate, eventLocation, eventDescription } = reqBody;
+    const {
+      eventName,
+      eventDate,
+      eventLocation,
+      eventDescription,
+      ticketPrice,
+      eventImage,
+    } = reqBody;
+    if (
+      !eventName ||
+      !eventDate ||
+      !eventLocation ||
+      !eventDescription ||
+      ticketPrice == null ||
+      !eventImage
+    ) {
+      return NextResponse.json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
     ///validate the data
     console.log("reqBody", reqBody);
     const event = await CreateEvent.findOne({ eventName });
@@ -22,6 +43,8 @@ export async function POST(request: NextRequest) {
       eventDate,
       eventLocation,
       eventDescription,
+      ticketPrice,
+      eventImage,
     });
     const savedEvent = await newEvent.save();
     console.log("savedEvent", savedEvent);

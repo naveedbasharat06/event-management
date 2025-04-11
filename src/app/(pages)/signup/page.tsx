@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -26,16 +27,15 @@ export default function SignupPage() {
       setLoading(true);
       const response = await axios.post("/api/users/signup", user);
       if (response.data.success) {
-        alert(
-          "Signup successful! Please check your email to verify your account."
-        );
+        toast.success(response.data.message);
         setUser({ username: "", email: "", password: "" });
         router.push("/login");
       }
-      alert(response.data.message);
-    } catch (error) {
-      alert("Signup failed.");
-      console.error(error);
+      if (!response.data.success) {
+        throw new Error(response.data.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Signup failed. Please try again.");
     } finally {
       setLoading(false);
     }

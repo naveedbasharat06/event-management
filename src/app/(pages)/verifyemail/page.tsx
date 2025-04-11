@@ -45,7 +45,7 @@ export default function VerifyEmailPage() {
           </p>
 
           {verified && (
-            <Alert className="bg-green-100 border-green-500 text-green-800">
+            <Alert className="bg-black border-green-500 text-green-800">
               <AlertTitle>Email Verified!</AlertTitle>
               <AlertDescription>
                 Your email has been successfully verified.

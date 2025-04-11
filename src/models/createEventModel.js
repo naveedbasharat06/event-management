@@ -17,10 +17,14 @@ const createEventSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    //   eventImage: {
-    //     type: String,
-    //     required: true,
-    //   },
+    ticketPrice: {
+      type: Number,
+      required: true,
+    },
+    eventImage: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

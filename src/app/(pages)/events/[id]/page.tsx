@@ -248,14 +248,14 @@ export default function EventDetailPage() {
         </div>
       ) : (
         <div
-          className=" p-6rounded-2xl shadow-xl border animate-fade-in h-full w-full flex justify-center  "
+          className="p-6 rounded-2xl shadow-xl border animate-fade-in h-full w-full flex justify-center"
           style={{
             backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${
               event.eventImage || "/default-event.jpg"
             })`,
           }}
         >
-          <div className=" w-[50%] bg-white mb-4 mt-20 rounded-2xl ">
+          <div className="w-[50%] bg-white mb-4 mt-20 rounded-2xl">
             <h2 className="text-2xl font-semibold text-center text-blue-700 mt-2">
               Secure Checkout
             </h2>
@@ -263,7 +263,16 @@ export default function EventDetailPage() {
               Complete your purchase below using our secure payment system.
             </p>
             <div className="max-w-xl mx-auto">
-              <EmbeddedCheckout clientSecret={clientSecret} />
+              {clientSecret !== "" ? (
+                <EmbeddedCheckout clientSecret={clientSecret} />
+              ) : (
+                <div className="flex justify-center items-center p-10">
+                  <Loader2 className="animate-spin h-6 w-6 text-blue-500" />
+                  <span className="ml-2 text-blue-600">
+                    Loading checkout...
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>

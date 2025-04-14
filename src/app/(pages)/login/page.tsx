@@ -23,7 +23,12 @@ export default function LoginPage() {
 
       if (response.data.success) {
         toast.success(response.data.message);
+        const token = response.data.token;
+        const expiryTime = new Date().getTime() + 60 * 60 * 1000; // 1 hour
+        localStorage.setItem("token", token);
+        localStorage.setItem("tokenExpiry", expiryTime.toString());
         window.dispatchEvent(new Event("userLoggedIn"));
+
         router.push("/");
       }
       if (!response.data.success) {

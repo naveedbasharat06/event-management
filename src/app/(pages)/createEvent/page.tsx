@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { jwtDecode } from "jwt-decode";
 
 const formSchema = z.object({
   eventName: z
@@ -44,6 +45,24 @@ const formSchema = z.object({
 export default function EventCreationForm() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isUploading, setIsUploading] = React.useState(false);
+  const [isAdmin, setIsAdmin] = React.useState<boolean | null>(null);
+
+  React.useEffect(() => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return setIsAdmin(false);
+
+      const decoded: any = jwtDecode(token);
+      if (decoded?.isadmin) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    } catch (err) {
+      console.error("Invalid token:", err);
+      setIsAdmin(false);
+    }
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -85,7 +104,6 @@ export default function EventCreationForm() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast.error("Image too large", {
         description: "Please upload an image smaller than 5MB",
@@ -130,6 +148,25 @@ export default function EventCreationForm() {
       setIsUploading(false);
     }
   };
+
+  // Conditional rendering for admin access
+  if (isAdmin === null) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <Loader2 className="animate-spin h-6 w-6 text-gray-500" />
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <h2 className="text-2xl font-semibold text-red-800">
+          Access Denied: Admins only.
+        </h2>
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 to-gray-200 px-4">

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 function Navbar() {
   const router = useRouter();
@@ -50,7 +51,19 @@ function Navbar() {
 
   const handleLogout = async () => {
     try {
-      await axios.post("/api/users/logout", {}, { withCredentials: true });
+      const response = await axios.post(
+        "/api/users/logout",
+        {},
+        { withCredentials: true }
+      );
+      if (response.data.success) {
+        toast.success("Logout successful");
+        localStorage.removeItem("token");
+        localStorage.removeItem("tokenExpiry");
+        setUsername("");
+        window.dispatchEvent(new Event("userLoggedIn")); // To trigger re-check
+        router.push("/login");
+      }
       setUsername("");
       window.dispatchEvent(new Event("userLoggedIn")); // To trigger re-check
       router.push("/login");

@@ -1,4 +1,3 @@
-// app/signup/page.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -18,24 +17,32 @@ export default function SignupPage() {
     password: "",
   });
 
+  const [isadmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       setLoading(true);
-      const response = await axios.post("/api/users/signup", user);
+      const response = await axios.post("/api/users/signup", {
+        ...user,
+        email: user.email.toLowerCase(), // normalize email
+        isadmin,
+      });
+
       if (response.data.success) {
         toast.success(response.data.message);
         setUser({ username: "", email: "", password: "" });
         router.push("/login");
-      }
-      if (!response.data.success) {
+      } else {
         throw new Error(response.data.message);
       }
     } catch (error: any) {
-      toast.error(error.message || "Signup failed. Please try again.");
+      toast.error(
+        error?.response?.data?.message ||
+          error.message ||
+          "Signup failed. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -47,7 +54,29 @@ export default function SignupPage() {
         onSubmit={handleSubmit}
         className="bg-[#171717] rounded-2xl shadow-xl p-8 w-full max-w-md space-y-6"
       >
-        <h2 className="text-2xl font-bold text-white text-center">Sign Up</h2>
+        <h2 className="text-2xl font-bold text-white text-center">
+          {isadmin ? "Admin Sign Up" : "User Sign Up"}
+        </h2>
+
+        {/* Toggle Buttons */}
+        <div className="flex justify-center gap-4 mb-4">
+          <Button
+            type="button"
+            variant={!isadmin ? "default" : "outline"}
+            onClick={() => setIsAdmin(false)}
+            className="w-1/2"
+          >
+            User
+          </Button>
+          <Button
+            type="button"
+            variant={isadmin ? "default" : "outline"}
+            onClick={() => setIsAdmin(true)}
+            className="w-1/2"
+          >
+            Admin
+          </Button>
+        </div>
 
         <div>
           <Label htmlFor="name">Name</Label>
@@ -85,8 +114,11 @@ export default function SignupPage() {
         </div>
 
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Signing up..." : "Sign Up"}
+          {loading
+            ? "Signing up..."
+            : `Sign Up as ${isadmin ? "Admin" : "User"}`}
         </Button>
+
         <div className="text-center pt-2">
           <p className="text-sm text-muted-foreground">
             Already have an account?

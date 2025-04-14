@@ -31,7 +31,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_BASE_URL!}api/events/getEvent`)
+      .get("/api/events/getEvent")
       .then((res) => setEvents(res.data.allEvents))
       .catch((err) => console.error("Error fetching events:", err));
   }, []);

@@ -31,7 +31,7 @@ export default function Page() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/events/getEvent")
+      .get("/api/events/getEvent")
       .then((res) => {
         setEvents(res.data.allEvents);
         setLoading(false);

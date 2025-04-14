@@ -29,7 +29,7 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 mb-4">
       <PaymentElement />
       <button
         type="submit"

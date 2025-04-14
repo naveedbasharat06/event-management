@@ -248,21 +248,23 @@ export default function EventDetailPage() {
         </div>
       ) : (
         <div
-          className=" p-6rounded-2xl shadow-xl border animate-fade-in h-full w-full  "
+          className=" p-6rounded-2xl shadow-xl border animate-fade-in h-full w-full flex justify-center  "
           style={{
             backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${
               event.eventImage || "/default-event.jpg"
             })`,
           }}
         >
-          <h2 className="text-2xl font-semibold text-center text-blue-700 mb-4 mt-20">
-            Secure Checkout
-          </h2>
-          <p className="text-center text-white mb-6">
-            Complete your purchase below using our secure payment system.
-          </p>
-          <div className="max-w-xl mx-auto">
-            <EmbeddedCheckout clientSecret={clientSecret} />
+          <div className=" w-[50%] bg-white mb-4 mt-20 rounded-2xl ">
+            <h2 className="text-2xl font-semibold text-center text-blue-700 mt-2">
+              Secure Checkout
+            </h2>
+            <p className="text-center text-black mb-6">
+              Complete your purchase below using our secure payment system.
+            </p>
+            <div className="max-w-xl mx-auto">
+              <EmbeddedCheckout clientSecret={clientSecret} />
+            </div>
           </div>
         </div>
       )}

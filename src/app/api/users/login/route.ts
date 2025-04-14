@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       username: user.username,
       isadmin: user.isadmin,
     };
-    const token = await jwt.sign(tokenData, process.env.token!, {
+    const token = await jwt.sign(tokenData, process.env.NEXT_PUBLIC_TOKEN!, {
       expiresIn: "1h",
     });
     const response = NextResponse.json({
